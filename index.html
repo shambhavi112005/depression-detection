@@ -17,12 +17,63 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #e66ada 6%, #1279e0 100%);
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Stars Background */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle linear infinite;
+        }
+
+        .shooting-star {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            animation: shoot linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(300px) translateY(300px);
+                opacity: 0;
+            }
         }
 
         .container {
@@ -32,8 +83,10 @@
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 40px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 100px rgba(102, 126, 234, 0.2);
             animation: slideUp 0.6s ease-out;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes slideUp {
@@ -54,7 +107,7 @@
 
         .header h1 {
             font-size: 2.2rem;
-            background: linear-gradient(135deg, #425ed7 0%, #0b0c0c 100%);
+            background: linear-gradient(135deg, #d02368 5%, #0808d9 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -77,7 +130,7 @@
             flex: 1;
             padding: 15px;
             background: #f5f5f5;
-            border: 2px solid #0b0bec;
+            border: 2px solid #060606;
             border-radius: 15px;
             cursor: pointer;
             font-size: 1rem;
@@ -110,7 +163,7 @@
         }
 
         .tab.active {
-            color: rgb(103, 12, 222);
+            color: rgb(13, 13, 13);
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
         }
@@ -145,12 +198,12 @@
             font-family: inherit;
             resize: vertical;
             transition: all 0.3s ease;
-            background: rgb(216, 196, 18);
+            background: rgb(212, 225, 225);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #0913d1;
             box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
@@ -329,14 +382,14 @@
         }
 
         .result-high {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-            color: white;
+            background: linear-gradient(135deg, #e4e81a 0%, #f04304 100%);
+            color: rgb(34, 34, 34);
             box-shadow: 0 15px 35px rgba(255, 107, 107, 0.3);
         }
 
         .result-low {
             background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);
-            color: white;
+            color: rgb(19, 18, 18);
             box-shadow: 0 15px 35px rgba(81, 207, 102, 0.3);
         }
 
@@ -461,10 +514,13 @@
     </style>
 </head>
 <body>
+    <!-- Animated Stars Background -->
+    <div class="stars-container" id="starsContainer"></div>
+
     <div class="container">
         <div class="header">
-            <h1>* MOOD MAP * </h1>
-            
+            <h1>--------- MOOD LENS ----------- </h1>
+            <h4> Detection of Depressive Indicators in Social Media Captions</h4>
         </div>
 
         <div class="tabs">
@@ -526,11 +582,58 @@
                     <div class="stat-value" id="lowProb">--</div>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
+        // Create animated stars and shooting stars
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            const numberOfStars = 150;
+            const numberOfShootingStars = 3;
+
+            // Create twinkling stars
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                const size = Math.random() * 3 + 1;
+                star.style.width = size + 'px';
+                star.style.height = size + 'px';
+                
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                
+                const duration = Math.random() * 3 + 2;
+                const delay = Math.random() * 5;
+                
+                star.style.animationDuration = duration + 's';
+                star.style.animationDelay = delay + 's';
+                
+                container.appendChild(star);
+            }
+
+            // Create shooting stars
+            for (let i = 0; i < numberOfShootingStars; i++) {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                
+                shootingStar.style.width = Math.random() * 100 + 50 + 'px';
+                shootingStar.style.left = Math.random() * 50 + '%';
+                shootingStar.style.top = Math.random() * 50 + '%';
+                
+                const duration = Math.random() * 2 + 1;
+                const delay = Math.random() * 10;
+                
+                shootingStar.style.animationDuration = duration + 's';
+                shootingStar.style.animationDelay = delay + 's';
+                
+                container.appendChild(shootingStar);
+            }
+        }
+
+        window.addEventListener('load', createStars);
+
         let currentTab = 'text';
         let extractedTextFromImage = '';
 
@@ -620,7 +723,6 @@
             });
         }
 
-        // Advanced text cleaning
         function cleanText(text) {
             if (!text) return "";
             
@@ -646,7 +748,6 @@
             return text;
         }
 
-        // Depression keywords (aligned with your dataset)
         const depressiveKeywords = [
             'hopeless', 'worthless', 'suicidal', 'suicide', 'kill', 'die', 'death',
             'end it all', 'give up', 'no point', 'cannot go on', 'depressed', 'depression',
@@ -658,7 +759,6 @@
             'sleep forever', 'escape', 'struggle', 'falling apart', 'depression'
         ];
 
-        // Positive keywords
         const positiveKeywords = [
             'happy', 'happiness', 'joy', 'joyful', 'excited', 'excitement', 'amazing',
             'wonderful', 'great', 'fantastic', 'awesome', 'love', 'loving', 'blessed',
@@ -688,52 +788,44 @@
                 let depressiveScore = 0;
                 let positiveScore = 0;
                 
-                // Count depressive keywords with proper weighting
                 depressiveKeywords.forEach(keyword => {
                     if (cleaned.includes(keyword)) {
-                        // Strong indicators
                         if (['hopeless', 'worthless', 'suicidal', 'suicide', 'kill', 'die'].includes(keyword)) {
                             depressiveScore += 5;
                         }
-                        // Moderate indicators
                         else if (['depressed', 'lonely', 'empty', 'meaningless', 'hate myself', 'broken'].includes(keyword)) {
                             depressiveScore += 3;
                         }
-                        // Mild indicators
                         else {
                             depressiveScore += 1;
                         }
                     }
                 });
                 
-                // Count positive keywords
                 positiveKeywords.forEach(keyword => {
                     if (cleaned.includes(keyword)) {
                         positiveScore += 2;
                     }
                 });
                 
-                // Calculate net score
                 const netScore = depressiveScore - positiveScore;
                 
-                // Calculate probability based on net score
                 let highRiskProb = 0;
                 
                 if (netScore >= 10) {
-                    highRiskProb = 0.80 + (Math.random() * 0.15);  // 80-95%
+                    highRiskProb = 0.80 + (Math.random() * 0.15);
                 } else if (netScore >= 5) {
-                    highRiskProb = 0.65 + (Math.random() * 0.15);  // 65-80%
+                    highRiskProb = 0.65 + (Math.random() * 0.15);
                 } else if (netScore >= 2) {
-                    highRiskProb = 0.52 + (Math.random() * 0.13);  // 52-65%
+                    highRiskProb = 0.52 + (Math.random() * 0.13);
                 } else if (netScore >= 0) {
-                    highRiskProb = 0.35 + (Math.random() * 0.15);  // 35-50%
+                    highRiskProb = 0.35 + (Math.random() * 0.15);
                 } else if (netScore >= -3) {
-                    highRiskProb = 0.20 + (Math.random() * 0.15);  // 20-35%
+                    highRiskProb = 0.20 + (Math.random() * 0.15);
                 } else {
-                    highRiskProb = 0.05 + (Math.random() * 0.15);  // 5-20%
+                    highRiskProb = 0.05 + (Math.random() * 0.15);
                 }
                 
-                // Ensure reasonable bounds
                 highRiskProb = Math.min(0.95, Math.max(0.05, highRiskProb));
                 
                 const lowRiskProb = 1 - highRiskProb;
